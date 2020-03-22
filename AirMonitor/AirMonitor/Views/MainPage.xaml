@@ -45,9 +45,7 @@
                 </Frame>
                 <Label
                     Text="Świetna jakość!"
-                    FontSize="20"
-                    TextColor="Black"
-                    FontAttributes="Bold"
+                    Style="{StaticResource TitleStyle}"
                     HorizontalTextAlignment="Center"/>
                 <Label
                     Text="Możesz bezpiecznie wyjść z domu bez swojej maski anty-smogowej i nie bać się o swoje zdrowie."
