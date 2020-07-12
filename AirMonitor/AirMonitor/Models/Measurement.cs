@@ -10,15 +10,12 @@ namespace AirMonitor.Models
 {
     public class Measurement
     {
-        [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
 
         public int CurrentDisplayValue { get; set; }
 
-        [OneToMany]
         public MeasurementItem Current { get; set; }
 
-        [OneToMany]
         public Installation Installation { get; set; }
     }
 }

@@ -66,22 +66,39 @@ namespace AirMonitor.ViewModels
         private async Task Initialize()
         {
             DatabaseHelper.Setup();
+            var storedItems = DatabaseHelper.GetAll();
 
-            var location = await Geolocation.GetLastKnownLocationAsync();
-
-            var installations = await GetInstallations(location, maxResults: 4);
-            var measurements = await GetMeasurementsForInstallations(installations);
-
-            if (measurements.Count() > 0)
+            if(storedItems.Any())
             {
-                Items = new List<Measurement>(measurements);
+                Items = storedItems.Select(c => new Measurement() {
+                                                CurrentDisplayValue = (int) c.Value, 
+                                                Installation = new Installation(c.City, c.Street, c.StreetNumber)}).ToList();
+
                 Locations = Items.Select(x => new MapLocation
                 {
                     Address = x.Installation.Address.Description,
                     Description = "CAQI: " + x.CurrentDisplayValue,
-                    Position = new Position(x.Installation.Location.Latitude, x.Installation.Location.Longitude)
                 }).ToList();
             }
+            else
+            {
+                var location = await Geolocation.GetLastKnownLocationAsync();
+
+                var installations = await GetInstallations(location, maxResults: 4);
+                var measurements = await GetMeasurementsForInstallations(installations);
+
+                    Items = new List<Measurement>(measurements);
+                    Locations = Items.Select(x => new MapLocation
+                    {
+                        Address = x.Installation.Address.Description,
+                        Description = "CAQI: " + x.CurrentDisplayValue,
+                        Position = new Position(x.Installation.Location.Latitude, x.Installation.Location.Longitude)
+                    }).ToList();
+
+                    DatabaseHelper.Update(Items);
+                
+            }
+            
         }
 
 
@@ -239,18 +256,18 @@ namespace AirMonitor.ViewModels
 
             var installations = await GetInstallations(location, maxResults: 4);
             var measurements = await GetMeasurementsForInstallations(installations);
-            if (measurements.Count() > 0)
-            {
-                Items = new List<Measurement>(measurements);
-                Locations = Items.Select(x => new MapLocation
-                {
-                    Address = x.Installation.Address.Description,
-                    Description = "CAQI: " + x.CurrentDisplayValue,
-                    Position = new Position(x.Installation.Location.Latitude, x.Installation.Location.Longitude)
-                }).ToList();
 
-                IsRefreshing = false;
-            }
+            Items = new List<Measurement>(measurements);
+            Locations = Items.Select(x => new MapLocation
+            {
+                Address = x.Installation.Address.Description,
+                Description = "CAQI: " + x.CurrentDisplayValue,
+                Position = new Position(x.Installation.Location.Latitude, x.Installation.Location.Longitude)
+            }).ToList();
+
+            DatabaseHelper.Update(Items);
+
+            IsRefreshing = false;
         }
     }
 }

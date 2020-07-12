@@ -2,7 +2,9 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using AirMonitor.Helpers;
 using AirMonitor.Views;
 using Newtonsoft.Json.Linq;
 using Xamarin.Forms;
@@ -59,6 +61,7 @@ namespace AirMonitor
 
         protected override void OnStart()
         {
+            DatabaseHelper.Setup();
         }
 
         protected override void OnSleep()

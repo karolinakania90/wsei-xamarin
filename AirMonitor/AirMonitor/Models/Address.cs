@@ -1,11 +1,21 @@
-﻿using System;
+﻿using SQLiteNetExtensions.Attributes;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace AirMonitor.Models
 {
     public class Address
     {
+ 
+        public Address(string city, string street, string number)
+        {
+            this.City = city;
+            this.Street = street;
+            this.Number = number;
+        }
+
         public string Country { get; set; }
         public string City { get; set; }
         public string Street { get; set; }

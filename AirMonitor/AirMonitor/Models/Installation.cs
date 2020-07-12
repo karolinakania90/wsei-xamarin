@@ -1,23 +1,27 @@
 ﻿
-using SQLite;
-using SQLiteNetExtensions.Attributes;
 
 namespace AirMonitor.Models
 {
     public class Installation
     {
-        [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
 
-        [OneToOne]
         public Location Location { get; set; }
 
-        [OneToOne]
+
+        public int LocationFkKey { get; set; }
+
         public Address Address { get; set; }
+
 
         public Installation()
         {
 
+        }
+
+        public Installation(string city, string street, string number)
+        {
+            this.Address = new Address(city, street, number);
         }
     }
 }
