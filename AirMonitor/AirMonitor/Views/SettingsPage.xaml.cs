@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using AirMonitor.ViewModels;
+
 using Xamarin.Forms;
 
 namespace AirMonitor.Views
 {
-    public partial class HomePage : ContentPage
+    public partial class SettingsPage : ContentPage
     {
-        public HomePage()
+        public SettingsPage()
         {
             InitializeComponent();
-
-            BindingContext = new HomeViewModel(Navigation);
         }
     }
 }
