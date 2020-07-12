@@ -87,6 +87,8 @@ namespace AirMonitor.ViewModels
                 var installations = await GetInstallations(location, maxResults: 4);
                 var measurements = await GetMeasurementsForInstallations(installations);
 
+                if (measurements != null)
+                {
                     Items = new List<Measurement>(measurements);
                     Locations = Items.Select(x => new MapLocation
                     {
@@ -96,7 +98,7 @@ namespace AirMonitor.ViewModels
                     }).ToList();
 
                     DatabaseHelper.Update(Items);
-                
+                }
             }
             
         }
@@ -256,16 +258,18 @@ namespace AirMonitor.ViewModels
 
             var installations = await GetInstallations(location, maxResults: 4);
             var measurements = await GetMeasurementsForInstallations(installations);
-
-            Items = new List<Measurement>(measurements);
-            Locations = Items.Select(x => new MapLocation
+            if (measurements != null)
             {
-                Address = x.Installation.Address.Description,
-                Description = "CAQI: " + x.CurrentDisplayValue,
-                Position = new Position(x.Installation.Location.Latitude, x.Installation.Location.Longitude)
-            }).ToList();
+                Items = new List<Measurement>(measurements);
+                Locations = Items.Select(x => new MapLocation
+                {
+                    Address = x.Installation.Address.Description,
+                    Description = "CAQI: " + x.CurrentDisplayValue,
+                    Position = new Position(x.Installation.Location.Latitude, x.Installation.Location.Longitude)
+                }).ToList();
 
-            DatabaseHelper.Update(Items);
+                DatabaseHelper.Update(Items);
+            }
 
             IsRefreshing = false;
         }
